@@ -1,6 +1,7 @@
 version: '3'
 services:
   python:
+    hostname: local-python
     image: local-python
     container_name: local-python
     build:
