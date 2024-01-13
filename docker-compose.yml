@@ -1,0 +1,17 @@
+version: '3'
+services:
+  python:
+    image: local-python
+    container_name: local-python
+    build:
+      context: ./
+      dockerfile: ./containers/python/Dockerfile
+    environment:
+      POSTGRES_HOST: '34.27.84.165'
+      POSTGRES_PORT: '5432'
+      POSTGRES_USERNAME: 'pipeline'
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DATABASE: 'sales_db'
+    volumes:
+      - ./source/scripts:/usr/src/app
+    stdin_open: true
