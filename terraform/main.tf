@@ -26,7 +26,7 @@ module "database" {
 module "instances" {
 
   source = "./instance"
-  project_region = var.region
+  public_ip_address = module.database.database_ip
 
 }
 
@@ -45,4 +45,10 @@ module "datastreams" {
   datastream_conn_db = "postgres"
   datastream_conn_bucket = "test1dsa414234dsa1233231123"
 
+}
+
+module "pubsub" {
+  source = "./pubsub"
+  ecom_topic_name = "ecom_topic"
+  ecom_subscription_name = "ecom_subscription"
 }

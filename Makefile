@@ -6,5 +6,9 @@ infra_storage:
 	terraform -chdir=./terraform apply -target module.buckets
 infra_cdc:
 	terraform -chdir=./terraform apply -target module.datastreams
+infra_instance:
+	terraform -chdir=./terraform apply -target module.instances
+infra_pubsub:
+	terraform -chdir=./terraform apply -target module.pubsub
 database_ingestion: 
 	docker exec -it local-python bash -c "python python/database_ingestion.py"
