@@ -15,6 +15,6 @@ resource "google_compute_instance" "ingest_data" {
       // Ephemeral public IP
     }
   }
-  metadata_startup_script   = templatefile("instance/start.sh", {"repo" = var.repository, "address" = var.address})
+  metadata_startup_script   = templatefile("instance/start.sh", {"repos" = var.repository, "address" = var.address})
   allow_stopping_for_update = true
 }
