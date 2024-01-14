@@ -2,7 +2,7 @@ import psycopg2
 import os
 
 # Configurações do banco de dados
-address = open('address.txt').read().strip()
+address = open('./python/address.txt').read().strip()
 db_params = {
     'dbname': os.getenv('POSTGRES_DATABASE'),
     'user': os.getenv('POSTGRES_USERNAME'),
