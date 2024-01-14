@@ -15,12 +15,15 @@ done
 cd sales-streaming-pipeline
 
 # starting containers
-sudo make -B containers > output.txt
+if sudo make -B containers > output.txt; then
 
-# saving ip-database in the python folder
-cd source/scripts/python
-echo ${address} >> address.txt
+    # saving ip-database in the python folder
+    cd source/scripts/python
+    echo ${address} >> address.txt
 
-# using make in the principal folder
-cd ../../../ && sudo make create_tables > output_create_tables.txt
-
+    # using make in the principal folder
+    cd ../../../ && echo $(pwd) > pwd.txt
+    sudo make -B create_tables > create_tables_output.txt 2>&1
+else
+    echo "Erro ao criar contêineres. Consulte output.txt para obter mais informações."
+fi

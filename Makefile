@@ -15,4 +15,4 @@ containers:
 	sudo docker-compose up -d
 
 create_tables: 
-	sudo docker exec -it local-python bash -c "python python/create_tables.py"
+	sudo docker exec local-python bash -c "python python/create_tables.py"
