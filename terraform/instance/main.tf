@@ -15,17 +15,16 @@ resource "google_compute_instance" "ingest_data" {
       // Ephemeral public IP
     }
   }
-  metadata_startup_script = <<-EOF
+  metadata_startup_script   = <<-EOF
   #!/bin/bash
-  sudo apt-get update
-  sudo apt-get upgrade
-  git clone https://github.com/ludsonfelipe/sales-streaming-pipeline
+  sudo apt-get -y update
+  cd /home/ubuntu && git clone ${var.repo}
+  sudo apt -y install make
   sudo snap install docker
   sudo snap refresh docker --channel=latest/edge
-  export POSTGRES_PASSWORD=${var.public_ip_address}
-  sudo apt install make
-  sudo docker-compose up -d
+  export POSTGRES_PASSWORD=${var.address}
+  cd sales-streaming-pipeline 
+  make -B containers
   EOF
-
   allow_stopping_for_update = true
 }
