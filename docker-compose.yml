@@ -8,7 +8,6 @@ services:
       context: ./
       dockerfile: ./containers/python/Dockerfile
     environment:
-      POSTGRES_HOST: '34.27.84.165'
       POSTGRES_PORT: '5432'
       POSTGRES_USERNAME: 'pipeline'
       POSTGRES_PASSWORD: '123456'

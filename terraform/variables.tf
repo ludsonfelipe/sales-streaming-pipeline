@@ -3,6 +3,6 @@ variable "region" {
   type = string
 }
 variable "project" {
-  default = "creating-and-150-bf68d721"
+  default = "playground-s-11-74f7442e"
   type = string
 }
