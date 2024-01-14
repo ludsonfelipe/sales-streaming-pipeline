@@ -3,6 +3,9 @@ variable "region" {
   type = string
 }
 variable "project" {
-  default = "playground-s-11-74f7442e"
+  default = "playground-s-11-a99b30ac"
   type = string
+}
+variable "repo" {
+  default = "https://github.com/ludsonfelipe/sales-streaming-pipeline"
 }

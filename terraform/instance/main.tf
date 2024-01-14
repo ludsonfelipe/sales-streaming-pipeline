@@ -15,16 +15,6 @@ resource "google_compute_instance" "ingest_data" {
       // Ephemeral public IP
     }
   }
-  metadata_startup_script   = <<-EOF
-  #!/bin/bash
-  sudo apt-get -y update
-  cd /home/ubuntu && git clone ${var.repo}
-  sudo apt -y install make
-  sudo snap install docker
-  sudo snap refresh docker --channel=latest/edge
-  cd sales-streaming-pipeline 
-  POSTGRES_VAR="TEST"
-  sudo make -B containers
-  EOF
+  metadata_startup_script   = templatefile("instance/start.sh", {"repo" = var.repository, "address" = var.address})
   allow_stopping_for_update = true
 }
