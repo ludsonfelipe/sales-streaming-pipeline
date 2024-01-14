@@ -26,7 +26,7 @@ module "database" {
 module "instances" {
 
   source = "./instance"
-  address = "test" #module.database.database_ip
+  #address = "test" #module.database.database_ip
 
 }
 
