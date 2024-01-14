@@ -22,5 +22,5 @@ cd source/scripts/python
 echo ${address} >> address.txt
 
 # using make in the principal folder
-cd ../../../ && sudo make create_tables > output.txt
+cd ../../../ && sudo make create_tables > output_create_tables.txt
 
