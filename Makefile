@@ -14,5 +14,5 @@ infra_pubsub:
 containers:
 	sudo docker-compose up -d
 
-database_ingestion: 
-	docker exec -it local-python bash -c "python python/database_ingestion.py"
+create_tables: 
+	docker exec -it local-python bash -c "python python/create_tables.py"
