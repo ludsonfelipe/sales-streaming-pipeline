@@ -22,9 +22,9 @@ resource "google_compute_instance" "ingest_data" {
   sudo apt -y install make
   sudo snap install docker
   sudo snap refresh docker --channel=latest/edge
-  export POSTGRES_PASSWORD=${var.address}
   cd sales-streaming-pipeline 
-  make -B containers
+  POSTGRES_VAR="TEST"
+  sudo make -B containers
   EOF
   allow_stopping_for_update = true
 }
