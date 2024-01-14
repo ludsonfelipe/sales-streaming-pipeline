@@ -2,13 +2,15 @@ import psycopg2
 import os
 
 # Configurações do banco de dados
+address = open('address.txt').read()
 db_params = {
     'dbname': os.getenv('POSTGRES_DATABASE'),
     'user': os.getenv('POSTGRES_USERNAME'),
     'password': os.getenv('POSTGRES_PASSWORD'),
-    'host': os.getenv('POSTGRES_HOST'),
+    'host': address,
     'port': os.getenv('POSTGRES_PORT')
 }
+print(db_params)
 
 def get_connection(db_params):
     return psycopg2.connect(**db_params)

@@ -1,6 +1,6 @@
 variable "address" {
-  default = "3123123"
+  type = string
 }
-variable "repo" {
-  default = "https://github.com/ludsonfelipe/sales-streaming-pipeline"
+variable "repository" {
+  type = string
 }
