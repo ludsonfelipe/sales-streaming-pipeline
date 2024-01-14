@@ -16,4 +16,5 @@ sudo make -B containers > output.txt
 
 cd source/scripts/python
 echo ${address} >> address.txt
+sudo make create_tables
 
