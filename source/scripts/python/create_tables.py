@@ -40,19 +40,20 @@ def execute_query_from_file(file_path, conn):
 
 def create_data():
     produto = random.choice(['Produto A', 'Produto B', 'Produto C', 'Produto D', 'Produto E', 'Produto F', 'Produto G', 'Produto H'])
+    id_cliente = random.randint(1, 100)
     quantidade = random.randint(1, 10)
     preco = round(random.uniform(10.0, 100.0), 2)
     moeda = random.choice(['USD', 'EUR', 'BRL'])
     data = (datetime.now() - timedelta(days=random.randint(1, 365))).date()
-    return produto, quantidade, preco, moeda, data
+    return produto, id_cliente, quantidade, preco, moeda, data
 
 def ingest_postgres(conn):
-    produto, quantidade, preco, moeda, data = create_data()
+    produto, id_cliente, quantidade, preco, moeda, data = create_data()
     with conn.cursor() as cursor:
         cursor.execute("""
-            INSERT INTO vendas (produto, quantidade, preco, moeda, data)
-            VALUES (%s, %s, %s, %s, %s);
-        """, (produto, quantidade, preco, moeda, data))
+            INSERT INTO vendas (id_cliente, produto, quantidade, preco, moeda, data)
+            VALUES (%s, %s, %s, %s, %s, %s);
+        """, (id_cliente, produto, quantidade, preco, moeda, data))
 
         conn.commit()
 
@@ -60,10 +61,11 @@ def ingest_pubsub(id_venda, project, topic):
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic)
 
-    produto, quantidade, preco, moeda, data = create_data()
+    produto, id_cliente, quantidade, preco, moeda, data = create_data()
 
     data = {
         'id_venda':id_venda,
+           'id_cliente':id_cliente,
            'produto':produto, 
            'quantidade':quantidade, 
            'preco':preco, 
