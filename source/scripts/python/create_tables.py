@@ -8,6 +8,9 @@ from google.cloud import pubsub_v1
 
 # Configurações do banco de dados
 address = open('./python/address.txt').read().strip()
+project = open('./python/project.txt').read().strip()
+topic = os.getenv('PUBSUB_TOPIC')
+
 db_params = {
     'dbname': os.getenv('POSTGRES_DATABASE'),
     'user': os.getenv('POSTGRES_USERNAME'),
@@ -15,9 +18,6 @@ db_params = {
     'host': address,
     'port': os.getenv('POSTGRES_PORT')
 }
-
-project = os.getenv('PUBSUB_PROJECT')
-topic = os.getenv('PUBSUB_TOPIC')
 
 print(db_params)
 
@@ -63,6 +63,7 @@ def ingest_pubsub(id_venda, project, topic):
 
     produto, id_cliente, quantidade, preco, moeda, data = create_data()
 
+    data_string = data.isoformat()
     data = {
         'id_venda':id_venda,
            'id_cliente':id_cliente,
@@ -70,7 +71,7 @@ def ingest_pubsub(id_venda, project, topic):
            'quantidade':quantidade, 
            'preco':preco, 
            'moeda':moeda, 
-           'data':data
+           'data':data_string
            }
 
     json_message = json.dumps(data)
