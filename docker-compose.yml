@@ -12,6 +12,8 @@ services:
       POSTGRES_USERNAME: 'pipeline'
       POSTGRES_PASSWORD: '123456'
       POSTGRES_DATABASE: 'sales_db'
+      PUBSUB_TOPIC: 'ecom_topic'
+      PUBSUB_PROJECT: 'playground-s-11-6ef63277'
     volumes:
       - ./source/scripts:/usr/src/app
     stdin_open: true
