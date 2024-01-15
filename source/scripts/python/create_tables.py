@@ -1,5 +1,10 @@
 import psycopg2
 import os
+from faker import Faker
+import random
+from datetime import datetime, timedelta
+import json
+from google.cloud import pubsub_v1
 
 # Configurações do banco de dados
 address = open('./python/address.txt').read().strip()
@@ -10,6 +15,10 @@ db_params = {
     'host': address,
     'port': os.getenv('POSTGRES_PORT')
 }
+
+project = os.getenv('PUBSUB_PROJECT')
+topic = os.getenv('PUBSUB_TOPIC')
+
 print(db_params)
 
 def get_connection(db_params):
@@ -29,6 +38,44 @@ def execute_query_from_file(file_path, conn):
     except psycopg2.Error as e:
         print(f"Erro ao executar consulta em {file_path}: {e}")
 
+def create_data():
+    produto = random.choice(['Produto A', 'Produto B', 'Produto C', 'Produto D', 'Produto E', 'Produto F', 'Produto G', 'Produto H'])
+    quantidade = random.randint(1, 10)
+    preco = round(random.uniform(10.0, 100.0), 2)
+    moeda = random.choice(['USD', 'EUR', 'BRL'])
+    data = (datetime.now() - timedelta(days=random.randint(1, 365))).date()
+    return produto, quantidade, preco, moeda, data
+
+def ingest_postgres(conn):
+    produto, quantidade, preco, moeda, data = create_data()
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO vendas (produto, quantidade, preco, moeda, data)
+            VALUES (%s, %s, %s, %s, %s);
+        """, (produto, quantidade, preco, moeda, data))
+
+        conn.commit()
+
+def ingest_pubsub(id_venda, project, topic):
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project, topic)
+
+    produto, quantidade, preco, moeda, data = create_data()
+
+    data = {
+        'id_venda':id_venda,
+           'produto':produto, 
+           'quantidade':quantidade, 
+           'preco':preco, 
+           'moeda':moeda, 
+           'data':data
+           }
+
+    json_message = json.dumps(data)
+    bytestring_message = json_message.encode("utf-8")
+    sent = publisher.publish(topic_path, bytestring_message)
+    sent.result()
+
 def main():
     try:
         # Conectar ao PostgreSQL
@@ -39,6 +86,9 @@ def main():
         execute_query_from_file('./sql/publication.sql', conn)
         execute_query_from_file('./sql/replication.sql', conn)
 
+        for id in range(1001, 2000):
+            ingest_postgres(conn)
+            ingest_pubsub(id_venda=id, project=project, topic=topic)
 
     finally:
         # Fechar a conexão
