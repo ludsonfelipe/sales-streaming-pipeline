@@ -3,7 +3,7 @@ variable "region" {
   type = string
 }
 variable "project" {
-  default = "playground-s-11-6ef63277"
+  default = "playground-s-11-acfa5e34"
   type = string
 }
 variable "repo" {
