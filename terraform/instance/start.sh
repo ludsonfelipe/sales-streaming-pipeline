@@ -20,6 +20,7 @@ if sudo make -B containers > output.txt; then
     # saving ip-database in the python folder
     cd source/scripts/python
     echo ${address} >> address.txt
+    echo ${project} >> project.txt
 
     # using make in the principal folder
     cd ../../../ && echo $(pwd) > pwd.txt

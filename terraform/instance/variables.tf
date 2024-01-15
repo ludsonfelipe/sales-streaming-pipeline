@@ -4,3 +4,6 @@ variable "address" {
 variable "repository" {
   type = string
 }
+variable "project" {
+  type = string
+}

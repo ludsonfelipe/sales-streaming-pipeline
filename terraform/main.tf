@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("/keys/playground-s-11-74f7442e-8eb1b2b5199c.json")
+  credentials = file("../source/scripts/keys/key.json")
   project     = var.project
   region      = var.region
 }
@@ -28,7 +28,7 @@ module "instances" {
   source = "./instance"
   address = module.database.database_ip
   repository = var.repo
-
+  project = var.project
 }
 
 module "datastreams" {
