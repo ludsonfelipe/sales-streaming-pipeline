@@ -10,5 +10,5 @@ variable "repo" {
   default = "https://github.com/ludsonfelipe/sales-streaming-pipeline"
 }
 variable "enable_apis" {
-  default = "yes"
+  default = "true"
 }
