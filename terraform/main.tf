@@ -1,7 +1,24 @@
 provider "google" {
-  credentials = file("../source/scripts/keys/key.json")
+  #credentials = file("../source/scripts/keys/key.json")
   project     = var.project
   region      = var.region
+}
+
+module "project-services" {
+  source                      = "terraform-google-modules/project-factory/google//modules/project_services"
+  version                     = "14.4.0"
+  disable_services_on_destroy = false
+
+  project_id  = var.project
+  enable_apis = var.enable_apis
+
+  activate_apis = [
+    "serviceusage.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "cloudapis.googleapis.com",
+    "sqladmin.googleapis.com",
+    "datastream.googleapis.com"
+  ]
 }
 
 module "buckets" {
@@ -21,6 +38,7 @@ module "database" {
   password = "123456"
   database_name = "sales_db"
   instance_cloud_sql = "postgres"
+  depends_on = [ module.project-services ]
 }
 
 module "instances" {
@@ -45,7 +63,7 @@ module "datastreams" {
   datastream_name = "sales_stream"
   datastream_conn_db = "postgres"
   datastream_conn_bucket = "test1dsa414234dsa1233231123"
-
+  depends_on = [ module.project-services ]
 }
 
 module "pubsub" {
