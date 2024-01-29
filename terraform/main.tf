@@ -21,6 +21,10 @@ module "project-services" {
   ]
 }
 
+locals {
+  credentials_json = jsondecode(file("./keys/key.json"))
+}
+
 module "buckets" {
   source = "./buckets"
 
@@ -47,7 +51,7 @@ module "instances" {
   address = module.database.database_ip
   repository = var.repo
   project = var.project
-  #credentials = var.credentials
+  credentials = local.credentials_json
 }
 
 module "datastreams" {
