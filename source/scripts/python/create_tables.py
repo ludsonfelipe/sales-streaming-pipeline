@@ -5,8 +5,10 @@ import random
 from datetime import datetime, timedelta
 import json
 from google.cloud import pubsub_v1
+from google.auth import jwt
 
 # Configurações do banco de dados
+service_account_info = json.load(open("./python/service-account-info.json"))
 address = open('./python/address.txt').read().strip()
 project = open('./python/project.txt').read().strip()
 topic = os.getenv('PUBSUB_TOPIC')
@@ -58,7 +60,11 @@ def ingest_postgres(conn):
         conn.commit()
 
 def ingest_pubsub(id_venda, project, topic):
-    publisher = pubsub_v1.PublisherClient()
+    publisher_audience = "https://pubsub.googleapis.com/google.pubsub.v1.Publisher"
+    credentials = jwt.Credentials.from_service_account_info(service_account_info, audience=publisher_audience)
+    credentials_pub = credentials.with_claims(audience=publisher_audience)
+
+    publisher = pubsub_v1.PublisherClient(credentials=credentials_pub)
     topic_path = publisher.topic_path(project, topic)
 
     produto, id_cliente, quantidade, preco, moeda, data = create_data()

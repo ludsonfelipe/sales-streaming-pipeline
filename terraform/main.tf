@@ -24,7 +24,7 @@ module "project-services" {
 module "buckets" {
   source = "./buckets"
 
-  bucket_name = "test1dsa414234dsa1233231123"
+  bucket_name = "raw-data-312312931293"
   location = "US"
 }
 
@@ -47,6 +47,7 @@ module "instances" {
   address = module.database.database_ip
   repository = var.repo
   project = var.project
+  credentials = var.credentials
 }
 
 module "datastreams" {
@@ -62,7 +63,7 @@ module "datastreams" {
 
   datastream_name = "sales_stream"
   datastream_conn_db = "postgres"
-  datastream_conn_bucket = "test1dsa414234dsa1233231123"
+  datastream_conn_bucket = "raw-data-312312931293"
   depends_on = [ module.project-services ]
 }
 

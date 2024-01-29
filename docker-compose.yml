@@ -13,8 +13,6 @@ services:
       POSTGRES_PASSWORD: '123456'
       POSTGRES_DATABASE: 'sales_db'
       PUBSUB_TOPIC: 'ecom_topic'
-      PUBSUB_PROJECT: 'playground-s-11-6ef63277'
-      GOOGLE_APPLICATION_CREDENTIALS: './keys/key.json'
     volumes:
       - ./source/scripts:/usr/src/app
     stdin_open: true

@@ -12,3 +12,6 @@ variable "repo" {
 variable "enable_apis" {
   default = "true"
 }
+variable "credentials" {
+  default = "./keys/key.json"
+}
