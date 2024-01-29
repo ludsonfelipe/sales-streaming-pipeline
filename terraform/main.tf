@@ -47,7 +47,7 @@ module "instances" {
   address = module.database.database_ip
   repository = var.repo
   project = var.project
-  credentials = var.credentials
+  #credentials = var.credentials
 }
 
 module "datastreams" {

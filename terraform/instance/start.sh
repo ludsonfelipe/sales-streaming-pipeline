@@ -21,7 +21,7 @@ if sudo make -B containers > output.txt; then
     cd source/scripts/python
     echo ${address} >> address.txt
     echo ${project} >> project.txt
-    echo ${credentials} >> service-account-info.json
+    #echo ${credentials} >> service-account-info.json
     # using make in the principal folder
     cd ../../../ && echo $(pwd) > pwd.txt
     sudo make -B create_tables > create_tables_output.txt 2>&1
