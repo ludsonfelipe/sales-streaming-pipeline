@@ -17,12 +17,24 @@ module "project-services" {
     "cloudresourcemanager.googleapis.com",
     "cloudapis.googleapis.com",
     "sqladmin.googleapis.com",
-    "datastream.googleapis.com"
+    "datastream.googleapis.com",
+    "iam.googleapis.com"
   ]
 }
 
-locals {
-  credentials_json = jsondecode(file("./keys/key.json"))
+
+resource "google_service_account" "my_service_account" {
+  account_id   = "pipeline"
+  display_name = "Pipeline Service Account"
+}
+
+resource "google_project_iam_binding" "pubsub_publisher" {
+  project = var.project
+  role    = "roles/pubsub.publisher"
+
+  members = [
+    "serviceAccount:${google_service_account.my_service_account.email}"
+  ]
 }
 
 module "buckets" {
@@ -51,6 +63,8 @@ module "instances" {
   address = module.database.database_ip
   repository = var.repo
   project = var.project
+  account = google_service_account.my_service_account.email
+  depends_on = [ google_project_iam_binding.pubsub_publisher ]
 }
 
 module "datastreams" {

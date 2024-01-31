@@ -80,6 +80,8 @@ def ingest_pubsub(id_venda, project, topic):
     sent.result()
 
 def main():
+    conn = None  # Inicialize conn fora do bloco try
+
     try:
         # Conectar ao PostgreSQL
         conn = get_connection(db_params)

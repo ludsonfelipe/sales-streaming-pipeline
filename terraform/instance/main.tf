@@ -17,4 +17,8 @@ resource "google_compute_instance" "ingest_data" {
   }
   metadata_startup_script   = templatefile("instance/start.sh", {"repos" = var.repository, "address" = var.address, "project" = var.project}) 
   allow_stopping_for_update = true
+  service_account {
+    email = var.account
+    scopes = ["cloud-platform"]
+  }
 }
