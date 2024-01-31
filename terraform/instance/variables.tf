@@ -7,6 +7,3 @@ variable "repository" {
 variable "project" {
   type = string
 }
-variable "credentials" {
-  type = map(string)
-}

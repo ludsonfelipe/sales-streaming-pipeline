@@ -5,10 +5,9 @@ import random
 from datetime import datetime, timedelta
 import json
 from google.cloud import pubsub_v1
-from google.auth import jwt
+from time import sleep
 
 # Configurações do banco de dados
-service_account_info = json.load(open("./python/service-account-info.json"))
 address = open('./python/address.txt').read().strip()
 project = open('./python/project.txt').read().strip()
 topic = os.getenv('PUBSUB_TOPIC')
@@ -21,7 +20,6 @@ db_params = {
     'port': os.getenv('POSTGRES_PORT')
 }
 
-print(db_params)
 
 def get_connection(db_params):
     return psycopg2.connect(**db_params)
@@ -60,11 +58,7 @@ def ingest_postgres(conn):
         conn.commit()
 
 def ingest_pubsub(id_venda, project, topic):
-    publisher_audience = "https://pubsub.googleapis.com/google.pubsub.v1.Publisher"
-    credentials = jwt.Credentials.from_service_account_info(service_account_info, audience=publisher_audience)
-    credentials_pub = credentials.with_claims(audience=publisher_audience)
-
-    publisher = pubsub_v1.PublisherClient(credentials=credentials_pub)
+    publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic)
 
     produto, id_cliente, quantidade, preco, moeda, data = create_data()
@@ -97,8 +91,10 @@ def main():
 
         for id in range(1001, 2000):
             ingest_postgres(conn)
+            print('Data Ingested To Postgres!')
             ingest_pubsub(id_venda=id, project=project, topic=topic)
-
+            print('Data Ingested To PubSub!')
+            sleep(random.randint(0,5))
     finally:
         # Fechar a conexão
         if conn:

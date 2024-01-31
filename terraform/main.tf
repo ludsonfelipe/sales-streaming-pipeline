@@ -51,7 +51,6 @@ module "instances" {
   address = module.database.database_ip
   repository = var.repo
   project = var.project
-  credentials = local.credentials_json
 }
 
 module "datastreams" {
