@@ -37,6 +37,19 @@ resource "google_project_iam_binding" "pubsub_publisher" {
   ]
 }
 
+resource "google_project_service_identity" "pubsub_id" {
+  provider = google-beta
+  project = var.project
+  service = "pubsub.googleapis.com"
+}
+
+resource "google_storage_bucket_iam_member" "user_pubsub_storage" {
+  bucket = module.buckets.bucket_name_pubsub
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${google_project_service_identity.pubsub_id.email}"
+}
+
+
 resource "random_id" "bucket_id" {
   byte_length = 4
 }
@@ -44,7 +57,8 @@ resource "random_id" "bucket_id" {
 module "buckets" {
   source = "./buckets"
 
-  bucket_name = "raw-database-${random_id.bucket_id.hex}"
+  bucket_name_database = "raw-database-${random_id.bucket_id.hex}"
+  bucket_name_pubsub = "raw-pubsub-${random_id.bucket_id.hex}"
   location = "US"
 }
 
@@ -84,7 +98,7 @@ module "datastreams" {
 
   datastream_name = "sales_stream"
   datastream_conn_db = "postgres"
-  datastream_conn_bucket = module.buckets.bucket_name
+  datastream_conn_bucket = module.buckets.bucket_name_database
   depends_on = [ module.project-services ]
 }
 
@@ -92,4 +106,5 @@ module "pubsub" {
   source = "./pubsub"
   ecom_topic_name = "ecom_topic"
   ecom_subscription_name = "ecom_subscription"
+  bucket_name_pubsub = module.buckets.bucket_name_pubsub
 }

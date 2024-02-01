@@ -3,6 +3,21 @@ resource "google_pubsub_topic" "ecom_topic" {
 }
 
 resource "google_pubsub_subscription" "ecom_sub" {
-    topic = google_pubsub_topic.ecom_topic.name
+  topic = google_pubsub_topic.ecom_topic.name
   name = var.ecom_subscription_name
+}
+
+resource "google_pubsub_subscription" "gcs_subscription" {
+  name  = "ecom-subscription-gcs"
+  topic = google_pubsub_topic.ecom_topic.name
+
+  cloud_storage_config {
+    bucket = var.bucket_name_pubsub
+
+    filename_prefix = "ecom-"
+    filename_suffix = "-${random_id.random_number.hex}"
+
+    max_bytes = 1000
+    max_duration = "60s"
+  }
 }
