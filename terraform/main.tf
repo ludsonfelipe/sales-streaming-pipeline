@@ -37,10 +37,14 @@ resource "google_project_iam_binding" "pubsub_publisher" {
   ]
 }
 
+resource "random_id" "bucket_id" {
+  byte_length = 4
+}
+
 module "buckets" {
   source = "./buckets"
 
-  bucket_name = "raw-data-312312931293"
+  bucket_name = "raw-database-${random_id.bucket_id.hex}"
   location = "US"
 }
 
@@ -80,7 +84,7 @@ module "datastreams" {
 
   datastream_name = "sales_stream"
   datastream_conn_db = "postgres"
-  datastream_conn_bucket = "raw-data-312312931293"
+  datastream_conn_bucket = module.buckets.bucket_name
   depends_on = [ module.project-services ]
 }
 
