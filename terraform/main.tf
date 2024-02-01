@@ -107,4 +107,8 @@ module "pubsub" {
   ecom_topic_name = "ecom_topic"
   ecom_subscription_name = "ecom_subscription"
   bucket_name_pubsub = module.buckets.bucket_name_pubsub
+  depends_on = [ 
+    module.buckets.bucket_name_pubsub,
+    google_storage_bucket_iam_member.user_pubsub_storage,
+    ]
 }
