@@ -1,5 +1,10 @@
 provider "google" {
-  #credentials = file("../source/scripts/keys/key.json")
+  credentials = file("./keys/key.json")
+  project     = var.project
+  region      = var.region
+}
+provider "google-beta" {
+  credentials = file("./keys/key.json")
   project     = var.project
   region      = var.region
 }
