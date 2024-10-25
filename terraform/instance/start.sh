@@ -23,6 +23,7 @@ if sudo make -B containers > output.txt; then
     echo ${project} >> project.txt
     # using make in the principal folder
     cd ../../../ && echo $(pwd) > pwd.txt
+    sleep 10
     sudo make -B create_tables > create_tables_output.txt 2>&1
 else
     echo "Erro ao criar contêineres. Consulte output.txt para obter mais informações."
